@@ -1,14 +1,14 @@
 SRC_DIR = src
 TEST_DIR = test
 BIN = main
-#SRC = $(wildcard $(SRC_DIR)/*.scm)
-SRC = $(SRC_DIR)/main.scm
+SRC = $(wildcard $(SRC_DIR)/*.scm)
+SRC_MAIN = $(SRC_DIR)/main.scm
 TESTS = $(wildcard $(TEST_DIR)/*.scm)
 
 all: $(BIN)
 
 $(BIN): $(SRC)
-	csc -o $(BIN) $(SRC)
+	csc -o $(BIN) $(SRC_MAIN)
 
 test: $(BIN)
 	@for t in $(TESTS); do \
