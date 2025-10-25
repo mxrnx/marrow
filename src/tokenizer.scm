@@ -30,7 +30,6 @@
 	      (values #f index))))
 
 	(define (try-identifier text index)
-	  ;(display (string-append text ":" (number->string index) "\n")) ; TODO
 	  (let* ((substr (substring text index))
 		 (m (string-search (regexp "^[A-Za-z_\\+\\-\\*\\/\\?!][A-Za-z_\\+\\-\\*\\/\\?!0-9]*") substr)))
 	    (if m
