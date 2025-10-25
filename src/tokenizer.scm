@@ -1,4 +1,4 @@
-(module marrow-tokenizer (tokenize make-token try-identifier try-string)
+(module marrow-tokenizer (tokenize make-token try-identifier try-string try-integer)
 	(import scheme regex chicken.base srfi-13)
 
 	(define (make-token type value) (cons type value))
@@ -22,7 +22,7 @@
 	      (values #f index))))
 
 	(define (try-integer text index)
-	  (let* ((m (string-search (regexp "^[0-9]+") (substring text index))))
+	  (let* ((m (string-search (regexp "^-?[0-9]+") (substring text index))))
 	    (if m
 	      (let ((val (car m)))
 		(values (make-token 'integer (string->number val))

@@ -27,6 +27,7 @@
 
 ; + form
 (check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3) (make-node 'integer 1)))) => 4)
+(check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer -3) (make-node 'integer 1)))) => -2)
 (check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3)))) 
        => "Too few or many arguments to + form")
 (check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3) (make-node 'integer 1) (make-node 'integer 7)))) 
@@ -36,6 +37,8 @@
 
 ; * form
 (check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'integer 3) (make-node 'integer 3)))) => 9)
+(check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'integer 3) (make-node 'integer -3)))) => -9)
+(check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'integer -3) (make-node 'integer -3)))) => 9)
 (check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'integer 3)))) 
        => "Too few or many arguments to * form")
 (check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'integer 3) (make-node 'integer 1) (make-node 'integer 7)))) 

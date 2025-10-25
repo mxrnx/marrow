@@ -9,6 +9,7 @@
 
 ; basic values
 (check (parse `(,(make-token 'integer 42))) => (make-node 'integer 42))
+(check (parse `(,(make-token 'integer -3))) => (make-node 'integer -3))
 (check (parse `(,(make-token 'identifier "function-name"))) => (make-node 'identifier "function-name"))
 (check (parse `(,(make-token 'string "hello world"))) => (make-node 'string "hello world"))
 (check (parse `(,(make-token 'symbol #\)))) => "Error: unexpected right parenthesis")

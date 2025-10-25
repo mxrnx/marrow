@@ -20,6 +20,10 @@
 (check (try-string "\"hello\"" 1) => #f)
 (check (try-string "1" 0) => #f)
 
+; try-integer
+(check (try-integer "3493" 0) => (make-token 'integer 3493))
+(check (try-integer "-77" 0) => (make-token 'integer -77))
+
 ; tokenize
 (check (tokenize "(") => `(,(make-token 'symbol #\( )))
 (check (tokenize ")") => `(,(make-token 'symbol #\) )))
