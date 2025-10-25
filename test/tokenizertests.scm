@@ -60,5 +60,7 @@
 						  (make-token 'symbol #\))
 						  (make-token 'symbol #\))))
 
+(check (tokenize "-7") => (list (make-token 'integer -7))) ; try-integer before try-identifier, because -7 would be a valid identifier
+
 (check-set-mode! 'report-failed)
 (check-report)
