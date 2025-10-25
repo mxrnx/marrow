@@ -1,7 +1,7 @@
 (module marrow-parser (parse make-node)
 	(import scheme)
 
-	(define (make-node type value) (list type value))
+	(define (make-node type value) (cons type value))
 
 	(define (format-error index) (string-append "Error: could not parse at index " (number->string index)))
 
@@ -10,7 +10,7 @@
 	    (if (>= i (length tokens))
 	      (values #f 0)
 	      (let ((token (list-ref tokens i)))
-		(if (and (equal? (car token) 'symbol) (equal? (cadr token) #\))) ; end of list
+		(if (and (equal? (car token) 'symbol) (equal? (cdr token) #\))) ; end of list
 		  (values (reverse nodes) (+ i 1))
 		  (call-with-values
 		    (lambda () (parse tokens i))
@@ -22,7 +22,7 @@
 	    (case (car token)
 	      ((integer identifier string) (values token (+ index 1)))
 	      ((symbol)
-	       (case (cadr token)
+	       (case (cdr token)
 		 ((#\()
 		  (call-with-values
 		    (lambda () (parse-list tokens (+ index 1)))

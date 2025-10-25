@@ -3,5 +3,5 @@
 
 	(define (interpret node)
 	  (case (car node)
-	    ((integer string) (cadr node))
+	    ((integer string) (cdr node))
 	    (else "TODO: implement"))))

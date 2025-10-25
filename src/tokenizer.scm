@@ -1,7 +1,7 @@
 (module marrow-tokenizer (tokenize make-token try-identifier try-string)
 	(import scheme regex chicken.base srfi-13)
 
-	(define (make-token type value) (list type value))
+	(define (make-token type value) (cons type value))
 
 	;; whitespace regex
 	(define whitespace-rx (regexp "\\s"))
