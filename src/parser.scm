@@ -1,4 +1,4 @@
-(module marrow-parser (parse make-node)
+(module marrow-parser (parse parse2 make-node)
 	(import scheme)
 
 	(define (make-node type value) (cons type value))
@@ -13,11 +13,13 @@
 		(if (and (equal? (car token) 'symbol) (equal? (cdr token) #\))) ; end of list
 		  (values (reverse nodes) (+ i 1))
 		  (call-with-values
-		    (lambda () (parse tokens i))
+		    (lambda () (parse2 tokens i))
 		    (lambda (node new-index)
 		      (loop (cons node nodes) new-index))))))))
 
-	(define (parse tokens index)
+	(define (parse tokens) (parse2 tokens 0))
+
+	(define (parse2 tokens index)
 	  (let ((token (list-ref tokens index)))
 	    (case (car token)
 	      ((integer identifier string) (values token (+ index 1)))
