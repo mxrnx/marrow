@@ -5,6 +5,8 @@
 (import marrow-parser marrow-interpreter)
 
 (check-set-mode! 'summary)
+(check-set-mode! 'off) ; TODO
+(check-set-mode! 'summary) ; TODO
 
 ; simple values
 (check (interpret (make-node 'integer 1999)) => 1999)
@@ -13,6 +15,15 @@
 ; built-in values
 (check (interpret (make-node 'identifier "nil")) => '())
 (check (procedure? (interpret (make-node 'identifier "+"))) => #t)
+(check (procedure? (lambda-builder '() (list (make-node 'integer 3)))) => #t)
+(check ((lambda-builder '() (make-node 'integer 3)) '() '()) => 3)
+(let* ((fn (cdr (assoc "fn" built-in-values)))
+       (resulting-procedure (fn (list (make-node 'list '()) (make-node 'integer 3)) '())))
+  (check (resulting-procedure '() '()) => 3))
+
+; eval & do (multi-eval)
+(check (interpret (make-node 'list (list (make-node 'identifier "eval") (make-node 'integer 55)))) => 55)
+(check (interpret (make-node 'list (list (make-node 'identifier "do") (make-node 'integer 57) (make-node 'integer 58)))) => 58)
 
 ; function application
 (check (interpret (make-node 'list (list (make-node 'integer 3)))) => "Error: tried to call non-procedure value")
@@ -21,8 +32,12 @@
 				     (make-node 'integer 10)
 				     (make-node 'integer 12)))) => 22)
 
+; bindings
+(check (interpret2 (make-node 'identifier "x") '()) => "Unknown value 'x'")
+(check (interpret2 (make-node 'identifier "x") (list (cons "x" 12))) => 12)
+
 ; lambda failure modes
-(check (interpret (make-node 'list (list (make-node 'identifier "fn")))) => "Too few arguments to lambda function")
+(check (interpret (make-node 'list (list (make-node 'identifier "fn")))) => "Too few or many arguments to lambda function")
 (check (interpret (make-node 'list (list
 				     (make-node 'identifier "fn")
 				     (make-node 'integer 1)
@@ -33,17 +48,34 @@
 				     (make-node 'identifier "i")))) => "Argument list to lambda should consist of only identifiers")
 
 ; lambdas
-;(check (interpret (make-node 'list (list
-				     ;(make-node 'identifier "fn")
-				     ;(make-node 'identifier "i")
-				     ;(make-node 'identifier "i")))) => #t) ; TODO
+(check (procedure? (interpret (make-node 'list (list
+						 (make-node 'identifier "fn")
+						 (make-node 'identifier "i")
+						 (make-node 'identifier "i"))))) => #t) ; TODO
+
+(check (procedure? (interpret (make-node 'list (list
+						 (make-node 'identifier "fn")
+						 (make-node 'list '())
+						 (make-node 'integer 20))))) => #t) ; TODO
+(check (procedure? (interpret (make-node 'list (list
+						 (make-node 'identifier "fn")
+						 (make-node 'list (list (make-node 'identifier "a") (make-node 'identifier "b")))
+						 (make-node 'integer 20))))) => #t) ; TODO
 
 ; application
 (check (interpret (make-node 'list (list 
 				     (make-node 'list (list
-					     (make-node 'identifier "fn")
-					     (make-node 'identifier "i")
-					     (make-node 'identifier "i")))
+							(make-node 'identifier "fn")
+							(make-node 'list '())
+							(make-node 'integer 26)))))) => 26)
+(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
+(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
+
+(check (interpret (make-node 'list (list 
+				     (make-node 'list (list
+							(make-node 'identifier "fn")
+							(make-node 'identifier "i")
+							(make-node 'identifier "i")))
 				     (make-node 'integer 9001)))) => 9001)
 
 (check-set-mode! 'report-failed)
