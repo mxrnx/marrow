@@ -1,0 +1,8 @@
+# build products
+main
+src/*.c
+src/*.o
+
+# temp files
+*~
+*.swp
