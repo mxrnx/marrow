@@ -25,7 +25,7 @@
 	  (let* ((m (string-search (regexp "^[0-9]+") (substring text index))))
 	    (if m
 	      (let ((val (car m)))
-		(values (make-token 'integer val)
+		(values (make-token 'integer (string->number val))
 			(+ index (string-length val))))
 	      (values #f index))))
 

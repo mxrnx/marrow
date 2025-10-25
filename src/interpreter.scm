@@ -16,10 +16,8 @@
 			(cons-zip argument-names 
 				  (map (lambda (y) (interpret2 y bindings)) args)))))))
 
-	(define (node-identifier node)
-	  (if (equal? (car node) 'identifier)
-	    (cdr node)
-	    #f))
+	(define (node-identifier node) (if (equal? (car node) 'identifier) (cdr node) #f))
+	(define (node-integer node) (if (equal? (car node) 'integer) (cdr node) #f))
 
 	(define built-in-values (list
 				  (cons "nil" '())
@@ -45,7 +43,11 @@
 							(lambda-builder argument-names (cadr nodes)))))
 						   (else "Arguments for a lambda should be an identifier or a list of identifiers")))))
 				  (cons "+" (lambda (nodes bindings)
-					      (apply + (map cdr nodes)))))) ; TODO: error handling if not integers
+					      (if (not (equal? (length nodes) 2))
+						"Too few or many arguments to + form"
+						(let ((a (interpret2 (car nodes) bindings))
+						      (b (interpret2 (cadr nodes) bindings)))
+						  (+ a b)))))))
 
 	(define (appl proc arguments bindings)
 	  (if (procedure? proc)

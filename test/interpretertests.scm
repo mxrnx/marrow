@@ -56,16 +56,16 @@
 (check (procedure? (interpret (make-node 'list (list
 						 (make-node 'identifier "fn")
 						 (make-node 'identifier "i")
-						 (make-node 'identifier "i"))))) => #t) ; TODO
+						 (make-node 'identifier "i"))))) => #t)
 
 (check (procedure? (interpret (make-node 'list (list
 						 (make-node 'identifier "fn")
 						 (make-node 'list '())
-						 (make-node 'integer 20))))) => #t) ; TODO
+						 (make-node 'integer 20))))) => #t)
 (check (procedure? (interpret (make-node 'list (list
 						 (make-node 'identifier "fn")
 						 (make-node 'list (list (make-node 'identifier "a") (make-node 'identifier "b")))
-						 (make-node 'integer 20))))) => #t) ; TODO
+						 (make-node 'integer 20))))) => #t)
 
 ; application
 (check (interpret (make-node 'list (list 
@@ -73,15 +73,39 @@
 							(make-node 'identifier "fn")
 							(make-node 'list '())
 							(make-node 'integer 26)))))) => 26)
-(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
-(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
-
 (check (interpret (make-node 'list (list 
 				     (make-node 'list (list
 							(make-node 'identifier "fn")
 							(make-node 'identifier "i")
 							(make-node 'identifier "i")))
 				     (make-node 'integer 9001)))) => 9001)
+
+(check (interpret (make-node 'list (list 
+				     (make-node 'list (list
+							(make-node 'identifier "fn")
+							(make-node 'list (list
+									   (make-node 'identifier "a")
+									   (make-node 'identifier "b")))
+							(make-node 'identifier "a")))
+				     (make-node 'integer 9001)
+				     (make-node 'integer 9002)))) => 9001)
+
+(check (interpret (make-node 'list (list 
+				     (make-node 'list (list
+							(make-node 'identifier "fn")
+							(make-node 'list (list
+									   (make-node 'identifier "a")
+									   (make-node 'identifier "b")))
+							(make-node 'list (list
+									   (make-node 'identifier "+")
+									   (make-node 'identifier "a")
+									   (make-node 'identifier "b")))))
+				     (make-node 'integer 9001)
+				     (make-node 'integer 9002)))) => 18003)
+
+; helper behavior
+(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
+(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
 
 (check-set-mode! 'report-failed)
 (check-report)

@@ -3,4 +3,11 @@
 (include "src/interpreter")
 (import marrow-tokenizer marrow-parser marrow-interpreter)
 
-(display (interpret (parse (tokenize "((fn (a b) (+ a b)) 1990 9)"))))
+(let* ((tokens (tokenize "((fn (a b) (+ a b)) 1990 9)"))
+       (tree (parse tokens))
+       (value (interpret tree)))
+  (display tokens)
+  (display "\n\n")
+  (display tree)
+  (display "\n\n")
+  (display value))
