@@ -19,6 +19,17 @@
 	(define (node-identifier node) (if (equal? (car node) 'identifier) (cdr node) #f))
 	(define (node-integer node) (if (equal? (car node) 'integer) (cdr node) #f))
 
+	(define (binary-operator op-name op)
+	  (cons op-name 
+		(lambda (nodes bindings)
+	    (if (not (equal? (length nodes) 2))
+	      (string-append "Too few or many arguments to " op-name " form")
+	      (let ((a (interpret2 (car nodes) bindings))
+		    (b (interpret2 (cadr nodes) bindings)))
+		(if (or (not (number? a)) (not (number? b)))
+		  (string-append "Arguments to " op-name " must be numerical")
+		  (op a b)))))))
+
 	(define built-in-values (list
 				  (cons "nil" '())
 				  (cons "eval" (lambda (nodes bindings) (interpret2 (car nodes) bindings)))
@@ -42,14 +53,8 @@
 						      (let ((argument-names (map (lambda (x) (cdr x)) (cdar nodes))))
 							(lambda-builder argument-names (cadr nodes)))))
 						   (else "Arguments for a lambda should be an identifier or a list of identifiers")))))
-				  (cons "+" (lambda (nodes bindings)
-					      (if (not (equal? (length nodes) 2))
-						"Too few or many arguments to + form"
-						(let ((a (interpret2 (car nodes) bindings))
-						      (b (interpret2 (cadr nodes) bindings)))
-						  (if (or (not (number? a)) (not (number? b)))
-						    "Arguments to + must be numerical"
-						    (+ a b))))))))
+				  (binary-operator "*" *)
+				  (binary-operator "+" +)))
 
 	(define (appl proc arguments bindings)
 	  (if (procedure? proc)

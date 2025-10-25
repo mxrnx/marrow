@@ -40,6 +40,19 @@
       (+ 1 (length (cdr lst))))
     nil))
 
+(defn neg (num)
+  (* -1 num))
+
+(defn - (a b)
+  (sum a (neg b)))
+
+(defn prod (_)
+  (if (nil? _)
+    1
+    (* 
+      (car _) 
+      (sum (cdr _)))))
+
 (defn sum (_)
   (if (nil? _)
     0
