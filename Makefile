@@ -1,6 +1,6 @@
 SRC_DIR = src
 TEST_DIR = test
-BIN = main
+BIN = marrow
 SRC = $(wildcard $(SRC_DIR)/*.scm)
 SRC_MAIN = $(SRC_DIR)/main.scm
 TESTS = $(wildcard $(TEST_DIR)/*.scm)

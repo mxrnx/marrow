@@ -1,5 +1,5 @@
 # build products
-main
+marrow
 src/*.c
 src/*.o
 
