@@ -43,13 +43,6 @@
 (check (interpret (make-node 'list (list (make-node 'identifier "*") (make-node 'string "3") (make-node 'integer 1)))) 
        => "Arguments to * must be numerical")
 
-; function application
-(check (interpret (make-node 'list (list (make-node 'integer 3)))) => "Error: tried to call non-procedure value")
-(check (interpret (make-node 'list (list 
-				     (make-node 'identifier "+")
-				     (make-node 'integer 10)
-				     (make-node 'integer 12)))) => 22)
-
 ; bindings
 (check (interpret2 (make-node 'identifier "x") '()) => "Unknown value 'x'")
 (check (interpret2 (make-node 'identifier "x") (list (cons "x" 12))) => 12)
@@ -86,6 +79,7 @@
 						 (make-node 'integer 20))))) => #t)
 
 ; application
+(check (interpret (make-node 'list (list (make-node 'integer 3)))) => "Error: tried to call non-procedure value")
 (check (interpret (make-node 'list (list 
 				     (make-node 'list (list
 							(make-node 'identifier "fn")
@@ -120,6 +114,23 @@
 									   (make-node 'identifier "b")))))
 				     (make-node 'integer 9001)
 				     (make-node 'integer 9002)))) => 18003)
+
+(check (interpret (make-node 'list (list 
+				     (make-node 'list (list
+							(make-node 'identifier "fn")
+							(make-node 'identifier "i")
+							(make-node 'identifier "i")))
+				     (make-node 'integer 9001)
+				     (make-node 'integer 9002)))) => "Too few or many arguments to lambda function (internal)")
+
+(check (interpret (make-node 'list (list 
+				     (make-node 'list (list
+							(make-node 'identifier "fn")
+							(make-node 'list (list
+									   (make-node 'identifier "a")
+									   (make-node 'identifier "b")))
+							(make-node 'list '())))
+				     (make-node 'integer 9001)))) => "Too few or many arguments to lambda function (internal)")
 
 ; helper behavior
 (check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
