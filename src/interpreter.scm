@@ -13,17 +13,29 @@
 	      (interpret2 
 		body
 		(append bindings 
-			     (cons-zip argument-names 
+			(cons-zip argument-names 
 				  (map (lambda (y) (interpret2 y bindings)) args)))))))
+
+	(define (node-identifier node)
+	  (if (equal? (car node) 'identifier)
+	    (cdr node)
+	    #f))
 
 	(define built-in-values (list
 				  (cons "nil" '())
 				  (cons "eval" (lambda (nodes bindings) (interpret2 (car nodes) bindings)))
 				  (cons "do" (lambda (nodes bindings) 
 					       (car (reverse (map (lambda (x) (interpret2 x bindings)) nodes))))) ; not yet interesting, as the language is pure so far
+				  (cons "let" (lambda (nodes bindings)
+						(if (not (equal? (length nodes) 3))
+						  "Too few or many arguments to let form"
+						  (let ((name (node-identifier (car nodes)))
+							(value (interpret2 (cadr nodes) bindings)))
+						    (interpret2 (caddr nodes) (append bindings (list (cons name value)))))
+						  )))
 				  (cons "fn" (lambda (nodes _bindings)
 					       (if (not (equal? (length nodes) 2))
-						 "Too few or many arguments to lambda function"
+						 "Too few or many arguments to fn form"
 						 (case (caar nodes)
 						   ((identifier) (lambda-builder (list (cdar nodes)) (cadr nodes)))
 						   ((list)

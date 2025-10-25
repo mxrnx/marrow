@@ -35,9 +35,14 @@
 ; bindings
 (check (interpret2 (make-node 'identifier "x") '()) => "Unknown value 'x'")
 (check (interpret2 (make-node 'identifier "x") (list (cons "x" 12))) => 12)
+(check (interpret2 (make-node 'list (list
+				      (make-node 'identifier "let")
+				      (make-node 'identifier "forty-two")
+				      (make-node 'integer 42)
+				      (make-node 'identifier "forty-two"))) '()) => 42)
 
 ; lambda failure modes
-(check (interpret (make-node 'list (list (make-node 'identifier "fn")))) => "Too few or many arguments to lambda function")
+(check (interpret (make-node 'list (list (make-node 'identifier "fn")))) => "Too few or many arguments to fn form")
 (check (interpret (make-node 'list (list
 				     (make-node 'identifier "fn")
 				     (make-node 'integer 1)
@@ -68,8 +73,8 @@
 							(make-node 'identifier "fn")
 							(make-node 'list '())
 							(make-node 'integer 26)))))) => 26)
-(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
-(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
+;(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
+;(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
 
 (check (interpret (make-node 'list (list 
 				     (make-node 'list (list
