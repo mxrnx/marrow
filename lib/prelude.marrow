@@ -1,2 +1,41 @@
 (def t 1)
-(def nil 'nil)
+(def nil '())
+
+(defn not x
+  (if x 
+    nil 
+    t))
+
+(defn or (_)
+  (if (nil? _)
+    nil ; reached end without truthy values
+    (if (car _)
+      (car _) ; truthy
+      (or (cdr _)))))
+
+; todo: and
+
+(defn map (proc lst)
+  (if (nil? lst)
+    nil
+    (cons
+      (proc (car lst))
+      (map (proc (cdr lst))))))
+
+(defn all? (proc lst)
+  (or (nil? list)
+      (and (proc (car lst)) 
+           (all? proc (cdr lst)))))
+
+(defn none? (proc lst)
+  (all? (fn x (not (proc x))) lst))
+
+(defn any? (proc lst)
+  (not (none? proc lst)))
+
+(defn length (lst)
+  (if (list? lst)
+    (if (nil? lst)
+      0
+      (+ 1 (length (cdr lst))))
+    nil))
