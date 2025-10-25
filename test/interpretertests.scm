@@ -25,6 +25,15 @@
 (check (interpret (make-node 'list (list (make-node 'identifier "eval") (make-node 'integer 55)))) => 55)
 (check (interpret (make-node 'list (list (make-node 'identifier "do") (make-node 'integer 57) (make-node 'integer 58)))) => 58)
 
+; + form
+(check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3) (make-node 'integer 1)))) => 4)
+(check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3)))) 
+       => "Too few or many arguments to + form")
+(check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'integer 3) (make-node 'integer 1) (make-node 'integer 7)))) 
+       => "Too few or many arguments to + form")
+(check (interpret (make-node 'list (list (make-node 'identifier "+") (make-node 'string "3") (make-node 'integer 1)))) 
+       => "Arguments to + must be numerical")
+
 ; function application
 (check (interpret (make-node 'list (list (make-node 'integer 3)))) => "Error: tried to call non-procedure value")
 (check (interpret (make-node 'list (list 

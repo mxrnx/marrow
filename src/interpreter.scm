@@ -47,7 +47,9 @@
 						"Too few or many arguments to + form"
 						(let ((a (interpret2 (car nodes) bindings))
 						      (b (interpret2 (cadr nodes) bindings)))
-						  (+ a b)))))))
+						  (if (or (not (number? a)) (not (number? b)))
+						    "Arguments to + must be numerical"
+						    (+ a b))))))))
 
 	(define (appl proc arguments bindings)
 	  (if (procedure? proc)
