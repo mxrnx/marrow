@@ -39,3 +39,10 @@
       0
       (+ 1 (length (cdr lst))))
     nil))
+
+(defn sum (_)
+  (if (nil? _)
+    0
+    (+ 
+      (car _) 
+      (sum (cdr _)))))
