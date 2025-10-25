@@ -73,8 +73,8 @@
 							(make-node 'identifier "fn")
 							(make-node 'list '())
 							(make-node 'integer 26)))))) => 26)
-;(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
-;(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
+(check (cons-zip '("a" "b" "c") '(1 2 3)) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3)))
+(check (append (list (cons "a" 1) (cons "b" 2)) (list (cons "c" 3) (cons "d" 4))) => (list (cons "a" 1) (cons "b" 2) (cons "c" 3) (cons "d" 4)))
 
 (check (interpret (make-node 'list (list 
 				     (make-node 'list (list
