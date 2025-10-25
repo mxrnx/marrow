@@ -29,7 +29,7 @@
 		    (lambda (inner-list new-index)
 		      (if inner-list
 			(values (make-node 'list inner-list) new-index)
-			"Error: missing right parenthesis"))))
-		 ((#\)) "Error: unexpected right parenthesis")
-		 (else "Error: unknown symbol")))
-	      (else (format-error index))))))
+			(values "Error: missing right parenthesis" index)))))
+		 ((#\)) (values "Error: unexpected right parenthesis" index))
+		 (else (values "Error: unknown symbol" index))))
+	      (else (values "Error: could not parse" index))))))
